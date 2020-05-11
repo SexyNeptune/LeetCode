@@ -46,3 +46,36 @@ class Solution {
     }
 }
 
+##  37.解数独
+class Solution {
+    public void solveSudoku(char[][] board) {
+        backTrace(board,0,0);
+    }
+
+    public boolean backTrace(char[][] board , int row , int col){
+        int n = board.length ;
+        if(col==9) return backTrace(board , row+1 , 0);
+        if(row == n) return true;
+        if(board[row][col] != '.') return backTrace(board, row , col+1);
+        for(char c = '1'; c<='9' ; c++){
+            if(!isValid(board , row , col, c)) continue;
+            board[row][col]=c;
+            if(backTrace(board , row , col)) return true;
+            board[row][col]='.';
+        }
+        return false;
+    }
+
+    private boolean isValid(char[][] board, int row, int col, char ch) {
+        // 三个方向，任一方向重复，ch就不能放在这个位置
+        for (int k = 0; k < 9; k++) {
+            // 同一行九个位置已出现 ch
+            if (board[row][k] == ch) return false;
+            // 同一列九个位置中已出现 ch
+            if (board[k][col] == ch) return false;
+            // 同一个子数独九个位置中已出现 ch
+            if (board[(row / 3) * 3 + k / 3][(col / 3) * 3 + k % 3] == ch) return false;
+        }
+        return true;
+    }
+}
